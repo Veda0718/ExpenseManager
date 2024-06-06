@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Manager</title>
+<link rel="stylesheet" href="homeScreen.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+	<!-- Sidebar -->
+	<div class="sidebar">
+		<div class="logo" id="usernameDisplay"></div>
+		<ul class="menu">
+			<li><a href="#"> <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+			</a></li>
+			<li><a href="#"> <i class="fa-solid fa-vault"></i> <span>Accounts</span></a>
+				<ul class="sidebar-dropdown" id="accountsList">
+				</ul></li>
+			<li>
+				<button class="add-account-btn">Add Account</button> <input
+				type="hidden" id="accountNo">
+
+			</li>
+			<li class="logout"><a href="index.html"> <i
+					class="fas fa-sign-out-alt"></i> <span>Logout</span>
+			</a></li>
+		</ul>
+
+	</div>
+	<!-- Main Content -->
+	<div class="main--content">
+
+		<div class="card--container">
+			<div class="card--wrapper">
+				<div class="payment--card light--red">
+					<div class="card--header">
+						<div class="amount">
+							<span class="title"> Total Income </span> <span
+								class="amount--value" id="totalIncome"></span>
+						</div>
+						<i class="fas fa-dollar-sign icon"></i>
+					</div>
+				</div>
+
+				<div class="payment--card light--purple">
+					<div class="card--header">
+						<div class="amount">
+							<span class="title"> Expenses </span> <span class="amount--value"
+								id="totalExpenses"></span>
+						</div>
+						<i class="fas fa-list icon dark--purple"></i>
+					</div>
+				</div>
+				
+				<div class="payment--card light--green">
+					<div class="card--header">
+						<div class="amount">
+							<span class="title"> Loan Amount </span> <span
+								class="amount--value" id="totalLoanAmount"></span>
+						</div>
+						<i class="fas fa-users icon dark--green"></i>
+					</div>
+				</div> 
+
+				<div class="payment--card light--blue">
+					<div class="card--header">
+						<div class="amount">
+							<span class="title"> Balance Amount </span> <span
+								class="amount--value" id="totalBalanceAmount"></span>
+						</div>
+						<i class="fa-solid fa-check icon dark--blue"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="header--wrapper">
+			<div class="header--title">
+				<h2>List of Expenses</h2>
+			</div>
+			<button href="#" class="add-expense-btn">Add Expense</button>
+			<div class="search--box">
+				<i class="fa-solid fa-search"></i> <input type="text"
+					placeholder="Search">
+			</div>
+		</div>
+
+		<div class="tabular--wrapper">
+			<div class="table--container">
+				<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Category</th>
+							<th>Date</th>
+							<th>Amount</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div id="addAccountModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>Add Account</h2>
+			<br>
+			<form id="addAccountForm" class="form-container">
+				<label class="form-label">Account Number</label> <input
+					name="accountNo" class="form-input" type="text"
+					placeholder="Enter your Account Number" required> <label
+					class="form-label">Income</label> <input name="income"
+					class="form-input" type="number" placeholder="Enter your Income"
+					required> <label class="form-label">Balance</label> <input
+					name="balance" class="form-input" type="number"
+					placeholder="Enter your Balance" required> <label
+					class="form-label">Loan Amount</label> <input name="loanAmount"
+					class="form-input" type="number"
+					placeholder="Enter your Loan Amount">
+				<button id="confirmAccountBtn" class="btn-submit" type="submit">Add
+					Account</button>
+			</form>
+		</div>
+	</div>
+
+
+	<!-- Add/Edit Expense Form -->
+	<div id="addExpenseModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2 id="expenseModalTitle">Add Expense</h2>
+			<br>
+			<form id="expenseForm" class="form-container">
+				<label class="form-label">Category</label> <input id="categoryInput"
+					class="form-input" type="text" placeholder="Enter the Category"
+					required> <label class="form-label">Date</label> <input
+					id="dateInput" class="form-input" type="text"
+					placeholder="Enter the Date" required> <label
+					class="form-label">Amount</label> <input id="amountInput"
+					class="form-input" type="number" placeholder="Enter the Amount"
+					required>
+				<button id="confirmAddBtn" class="btn-submit" type="submit">
+					Add Expense</button>
+			</form>
+		</div>
+	</div>
+
+
+	<!-- Update Expense Record -->
+	<div id="updateExpenseModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2 id="updateExpenseModalTitle">Update Expense</h2>
+			<br>
+			<form id="updateExpenseForm" class="form-container">
+				<input type="hidden" id="expenseId" name="expenseId"> <label
+					class="form-label">Category</label> <input class="form-input"
+					type="text" name="category" placeholder="Enter the Category"
+					required> <label class="form-label">Date</label> <input
+					class="form-input" type="text" name="date"
+					placeholder="Enter the Date" required> <label
+					class="form-label">Amount</label> <input class="form-input"
+					type="number" name="amount" placeholder="Enter the Amount" required>
+				<button id="confirmUpdateBtn" class="btn-submit" type="submit">
+					Edit Expense</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- Delete Expense Record -->
+	<div id="deleteExpenseModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2>Delete Expense</h2>
+			<br>
+			<form id="deleteExpenseForm" class="form-container">
+				<p>Are you sure you want to delete this expense?</p>
+				<input type="hidden" id="expenseIdToDelete" name="expenseIdToDelete">
+				<br>
+				<button id="confirmDeleteBtn" class="btn-submit" type="submit">
+					Delete Expense</button>
+			</form>
+		</div>
+	</div>
+
+
+	<script>
+	document.addEventListener("DOMContentLoaded", () => {
+	
+	
+	    const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+	    if (loggedInUsername) {
+	        document.getElementById("usernameDisplay").textContent = loggedInUsername;
+	        fetch("http://localhost:8081/users/" + loggedInUsername)
+	            .then(response => response.json())
+	            .then(user => {
+	                const accountsList = user.accounts;
+	                const accountsUl = document.getElementById("accountsList");
+
+	                // Function to populate the table with expenses
+	                const populateTable = (account) => {
+				    const tbody = document.querySelector("table tbody");
+				    tbody.innerHTML = "";
+				    account.expenseId?.forEach(expenseId => {
+				        const expense = user.expenses.find(expense => expense.expenseId === expenseId);
+				        if (expense) {
+				            const tr = document.createElement("tr");
+				            tr.innerHTML = `
+				                <td>${expense.expenseId}</td>
+				                <td>${expense.category}</td>
+				                <td>${expense.date}</td>
+				                <td>${expense.expenseAmount.toFixed(2)}</td>
+				                <td>
+				                    <button class="edit-expense-btn">
+				                        <i class="fas fa-edit"></i>
+				                    </button>
+				                    <button class="delete-expense-btn">
+				                        <i class="fas fa-trash-alt"></i>
+				                    </button>
+				                </td>
+				            `;
+				            tbody.appendChild(tr);
+				        }
+				    });
+				};
+
+
+	                // Function to update total income, balance, and expenses
+	                const updateTotals = (account) => {
+	                    document.getElementById("totalIncome").textContent = "$" + account.income.toFixed(2);
+	                    document.getElementById("totalBalanceAmount").textContent = "$" + account.balance.toFixed(2);
+	                    document.getElementById("totalLoanAmount").textContent = "$" + account.loanAmount.toFixed(2);
+	                    let totalExpenses = 0;
+	                    account.expenseId?.forEach(expenseId => {
+	                        const expense = user.expenses.find(expense => expense.expenseId === expenseId);
+	                        if (expense) {
+	                            totalExpenses += expense.expenseAmount;
+	                        }
+	                    });
+	                    document.getElementById("totalExpenses").textContent = "$" + totalExpenses.toFixed(2);
+	                };
+
+	                accountsList?.forEach((account, index) => {
+	                    const accountLi = document.createElement("li");
+	                    const accountLink = document.createElement("a");
+	                    accountLink.href = "#";
+	                    accountLink.classList.add("sidebar-link");
+	                    accountLink.textContent = account.accountNo;
+	                    accountLi.appendChild(accountLink);
+	                    accountsUl.appendChild(accountLi);
+
+	                    if (index === 0) {
+	                        accountLi.classList.add("active");
+	                        updateTotals(account);
+	                        populateTable(account);
+	                        document.getElementById("accountNo").value = account.accountNo;
+	                    }
+
+	                    accountLink.addEventListener("click", () => {
+	                        document.querySelectorAll(".sidebar-link").forEach(link => link.parentElement.classList.remove("active"));
+	                        accountLi.classList.add("active");
+	                        updateTotals(account);
+	                        document.querySelectorAll("table tbody tr").forEach(row => row.remove());
+	                        populateTable(account);
+	                        document.getElementById("accountNo").value = account.accountNo;
+
+	                    });
+	                });
+	                 // Get the modal elements
+	                const addAccountModal = document.getElementById('addAccountModal');
+	                const expenseModal = document.getElementById('addExpenseModal');
+	                const updateExpenseModal = document.getElementById('updateExpenseModal');
+	                const deleteExpenseModal = document.getElementById('deleteExpenseModal');
+
+	                // Get the button that opens the modals
+	                const addAccountBtn = document.querySelector('.add-account-btn');
+	                const addExpenseBtn = document.querySelector('.add-expense-btn');
+	                const updateExpenseBtn = document.querySelectorAll('.edit-expense-btn');
+	                const deleteExpenseBtn = document.querySelectorAll('.delete-expense-btn');
+
+	                // Get the <span> element that closes the modal
+	                const closeButtons = document.querySelectorAll('.close');
+
+	                // When the user clicks the button, open the modal
+	                addAccountBtn.addEventListener('click', () => {
+	                    addAccountModal.style.display = 'block';
+	                });
+
+	                addExpenseBtn.addEventListener('click', () => {
+	                    expenseModal.style.display = 'block';
+	                });
+
+	                updateExpenseBtn.forEach(button => {
+	                    button.addEventListener('click', () => {
+	                    updateExpenseModal.style.display = 'block';
+	                    });
+	                });
+
+	                deleteExpenseBtn.forEach(button => {
+	                    button.addEventListener('click', () => {
+	                    deleteExpenseModal.style.display = 'block';
+	                    });
+	                });
+
+	                // When the user clicks on <span> (x), close the modal
+	                closeButtons.forEach(button => {
+	                    button.addEventListener('click', () => {
+	                        addAccountModal.style.display = 'none';
+	                        expenseModal.style.display = 'none';
+	                        updateExpenseModal.style.display = 'none';
+	                        deleteExpenseModal.style.display = 'none';
+	                    });
+	                });
+
+	                // When the user clicks anywhere outside of the modal, close it
+	                window.addEventListener('click', (event) => {
+	                    if (event.target === addAccountModal ||
+	                        event.target === expenseModal ||
+	                        event.target === updateExpenseModal ||
+	                        event.target === deleteExpenseModal) {
+	                        addAccountModal.style.display = 'none';
+	                        expenseModal.style.display = 'none';
+	                        updateExpenseModal.style.display = 'none';
+	                        deleteExpenseModal.style.display = 'none';
+	                    }
+	                });
+
+	                // Function to open the update expense modal with prefilled data
+
+	                // Get all edit expense buttons
+	                const editExpenseButtons = document.querySelectorAll('.edit-expense-btn');
+
+	                // Add event listeners to all edit expense buttons
+	                editExpenseButtons.forEach(button => {
+	                    button.addEventListener('click', () => {
+	                        // Extract the data from the row corresponding to the button
+	                        const row = button.closest('tr');
+	                        const expenseId = row.querySelector('td:nth-child(1)').textContent;
+	                        const category = row.querySelector('td:nth-child(2)').textContent;
+	                        const date = row.querySelector('td:nth-child(3)').textContent;
+	                        const amount = row.querySelector('td:nth-child(4)').textContent;
+
+	                        console.log("expenseId",expenseId);
+	                        console.log("category",category);
+	                        console.log("date",date);
+	                        console.log("amount",amount);
+	                        // Open the update expense modal with prefilled data
+	                        openUpdateExpenseModal(category, date, amount, expenseId);
+	                    });
+	                });	
+	                
+	             // Add event listeners to all delete expense buttons
+	                const deleteExpenseButtons = document.querySelectorAll('.delete-expense-btn');
+	                deleteExpenseButtons.forEach(button => {
+	                    button.addEventListener('click', () => {
+	                        // Extract the expense ID from the row corresponding to the button
+	                        const row = button.closest('tr');
+	                        const expenseId = row.querySelector('td:nth-child(1)').textContent;
+
+	                        // Open the delete expense modal with the expense ID
+	                        openDeleteExpenseModal(expenseId);
+	                    });
+	                });
+	                
+	            })
+	            .catch(error => console.error("Error:", error));
+	    } else {
+	        window.location.href = "index.html";
+	    }
+	});
+	/* --------------------------------------------------------------------------------------------------------------------	
+	 */
+	function openUpdateExpenseModal(category, date, amount, expenseId) {
+        const updateExpenseModal = document.getElementById('updateExpenseModal');
+        const modalTitle = document.getElementById('updateExpenseModalTitle');
+        const expenseForm = document.getElementById('updateExpenseForm');
+
+        // Prefill the form fields with the data of the selected record
+        expenseForm.elements['category'].value = category;
+        expenseForm.elements['date'].value = date;
+        expenseForm.elements['amount'].value = amount;
+        expenseForm.elements['expenseId'].value = expenseId;
+
+        // Set the modal title
+        modalTitle.textContent = 'Update Expense';
+
+        // Display the update expense modal
+        updateExpenseModal.style.display = 'block';
+    }
+	/* --------------------------------------------------------------------------------------------------------------------	
+	 */
+	 
+	 function openDeleteExpenseModal(expenseId) {
+		    const deleteExpenseModal = document.getElementById('deleteExpenseModal');
+		    const expenseIdToDeleteInput = document.getElementById('expenseIdToDelete');
+
+		    // Set the value of the hidden input field
+		    expenseIdToDeleteInput.value = expenseId;
+
+		    // Display the delete expense modal
+		    deleteExpenseModal.style.display = 'block';
+		}
+
+	
+	/* --------------------------------------------------------------------------------------------------------------------	
+	 */
+	
+	// Function to get the current account number (implement this function according to your application logic)
+	function getCurrentAccountNo() {
+		const selectedAccountElement = document.getElementById('accountNo');
+	    if (selectedAccountElement) {
+	        return selectedAccountElement.value;
+	    } else {
+	        // Return a default value or handle the case where the account is not selected
+	        return null;
+	    }
+	}
+	/* --------------------------------------------------------------------------------------------------------------------	
+	 */
+	// Add an event listener to the form's submit event
+	document.getElementById("addAccountForm").addEventListener("submit", (event) => {
+		const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+	    // Prevent the default form submission
+	    event.preventDefault();
+
+	    // Get the form data
+	    const formData = new FormData(event.target);
+
+	    // Create a new Account object from the form data
+	    const newAccount = {
+	        accountNo: formData.get("accountNo"),
+	        balance: parseFloat(formData.get("balance")),
+	        income: parseFloat(formData.get("income")),
+	        loanAmount: formData.get("loanAmount"),
+	        expenseId: []
+	    };
+
+	    // Make a POST request to add the new account
+	    fetch("http://localhost:8081/users/" + loggedInUsername + "/accounts", {
+	        method: "POST",
+	        headers: {
+	            "Content-Type": "application/json"
+	        },
+	        body: JSON.stringify(newAccount)
+	    })
+	    .then(response => response.json())
+	    .then(user => {
+	        // Optionally, update the UI to reflect the new account
+	        console.log("New account added:", user);
+	        location.reload();
+	    })
+	    .catch(error => console.error("Error adding account:", error));
+
+	    // Close the modal
+	    document.getElementById("addAccountModal").style.display = "none";
+	});
+
+	/* --------------------------------------------------------------------------------------------------------------------	
+	 */
+	// Add an event listener to the Add Expense button
+	document.getElementById("confirmAddBtn").addEventListener("click", () => {
+	    const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+	    const accountNo = getCurrentAccountNo(); // Implement this function to get the current account number
+
+	    // Get the form input values
+	    const category = document.getElementById("categoryInput").value;
+	    const date = document.getElementById("dateInput").value;
+	    const amount = parseFloat(document.getElementById("amountInput").value);
+
+	    // Create a new Expense object
+	    const newExpense = {
+	        category: category,
+	        date: date,
+	        expenseAmount: amount
+	    };
+
+	    // Make a POST request to add the new expense
+	    fetch("http://localhost:8081/users/" + loggedInUsername + "/expenses/" + accountNo, {
+	        method: "POST",
+	        headers: {
+	            "Content-Type": "application/json"
+	        },
+	        body: JSON.stringify(newExpense)
+	    })
+	    .then(response => response.json())
+	    .then(user => {
+	        // Optionally, update the UI to reflect the new expense
+	        console.log("New expense added:", user);
+	        location.reload(); // Refresh the page to update the expense table
+	    })
+	    .catch(error => console.error("Error adding expense:", error));
+
+	    // Close the modal
+	    document.getElementById("addExpenseModal").style.display = "none";
+	});
+	
+/* --------------------------------------------------------------------------------------------------------------------	*/
+// Add an event listener to the update expense form's submit event
+document.getElementById("updateExpenseForm").addEventListener("submit", (event) => {
+    const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Get the form input values
+    const category = document.getElementById("updateExpenseForm").elements["category"].value;
+    const date = document.getElementById("updateExpenseForm").elements["date"].value;
+    const amount = parseFloat(document.getElementById("updateExpenseForm").elements["amount"].value);
+
+    // Get the expense ID from the form's hidden input field
+    const expenseId = parseInt(document.getElementById("expenseId").value);
+
+    // Create a new Expense object with the updated values
+    const updatedExpense = {
+        expenseId: expenseId,
+        category: category,
+        date: date,
+        expenseAmount: amount
+    };
+
+    // Make a PUT request to update the expense
+    fetch(`http://localhost:8081/users/${loggedInUsername}/expenses/${expenseId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(updatedExpense)
+    })
+    .then(response => response.json())
+    .then(user => {
+        // Optionally, update the UI to reflect the updated expense
+        console.log("Expense updated:", user);
+        location.reload(); // Refresh the page to update the expense table
+    })
+    .catch(error => console.error("Error updating expense:", error));
+
+    // Close the modal
+    document.getElementById("updateExpenseModal").style.display = "none";
+});
+
+/* --------------------------------------------------------------------------------------------------------------------	*/
+
+//Add an event listener to the delete expense form's submit event
+document.getElementById("deleteExpenseForm").addEventListener("submit", (event) => {
+    const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+    // Prevent the default form submission
+    event.preventDefault();
+
+    // Get the expense ID from wherever it's stored (e.g., a hidden input field)
+    const expenseId = parseInt(document.getElementById("expenseIdToDelete").value);
+
+    // Make a DELETE request to delete the expense
+    fetch(`http://localhost:8081/users/${loggedInUsername}/expenses/${expenseId}`, {
+        method: "DELETE",
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Expense deleted successfully.");
+            // Optionally, update the UI to reflect the deletion
+            location.reload(); // Refresh the page to update the expense table
+        } else {
+            throw new Error("Failed to delete expense.");
+        }
+    })
+    .catch(error => console.error("Error deleting expense:", error));
+
+    // Close the modal
+    document.getElementById("deleteExpenseModal").style.display = "none";
+});
+
+/* --------------------------------------------------------------------------------------------------------------------	*/
+
+document.querySelector('.search--box input').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent the default form submission
+        const searchCriteria = event.target.value.trim();
+        // Call a function to perform the search and update the table
+        searchAndPopulateTable(searchCriteria);
+    }
+});
+const searchAndPopulateTable = (searchCriteria) => {
+    const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+    const accountNo = getCurrentAccountNo();
+    fetch(`http://localhost:8081/users/${loggedInUsername}/expenses/search/${accountNo}?searchCriteria=${searchCriteria}`)
+        .then(response => response.json())
+        .then(matchedExpenses => {
+            const tbody = document.querySelector("table tbody");
+            tbody.innerHTML = "";
+            matchedExpenses.forEach(expense => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${expense.expenseId}</td>
+                    <td>${expense.category}</td>
+                    <td>${expense.date}</td>
+                    <td>${expense.expenseAmount.toFixed(2)}</td>
+                    <td>
+                        <button class="edit-expense-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-expense-btn">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(error => console.error("Error searching expenses:", error));
+};
+
+
+
+
+
+
+
+
+	</script>
+</body>
+
+</html>

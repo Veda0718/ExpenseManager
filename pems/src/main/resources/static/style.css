@@ -1,0 +1,159 @@
+@charset "UTF-8";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    background-color: black; /* Set background color to black */
+    overflow-y: scroll; /* Enable vertical scrolling */
+}
+
+.home {
+    padding: 70px 100px 0;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start; /* Align items to the top */
+}
+
+.content {
+    max-width: 500px;
+    margin: 100px; /* Add margin to the right to create space */
+}
+
+.content h2 {
+    font-size: 2.5em;
+    letter-spacing: 0.03em;
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+
+.login-register {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column; /* Stack forms vertically */
+    align-items: center; /* Center forms horizontally */
+    justify-content: center; /* Center forms vertically */
+}
+.login-register h2{
+	text-align: center;
+}
+.wrapper-login, .wrapper-register{
+    width: 100%;
+    max-width: 400px;
+    margin-top: 50px; /* Adjust margin to move forms up */
+}
+
+.form--hidden {
+    display: none;
+}
+
+.form__message {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.form__message--success {
+    color: green;
+}
+
+.form__message--error {
+    margin-top: 14px;
+    color: red;
+}
+
+.input-box--error {
+    color: red;
+    border-color: red;
+}
+
+.form__input-error-message {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: red;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 20px 0; /* Adjust margin for input boxes */
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 1px solid white;
+    outline: none;
+    border-radius: 40px;
+    font-size: 1em;
+    color: white;
+    padding: 0 5px 0 45px;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 45px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: white;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    font-size: .8em;
+    top: -14px;
+    left: 17px;
+}
+
+.input-box .icon {
+    position: absolute;
+    font-size: 1.2em;
+    color: white;
+    top: 14px;
+    left: 15px;
+}
+
+.btn {
+    width: 100%;
+    height: 50px;
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    background: linear-gradient(90deg, #1e0b04, #71412a);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    font-size: 1em;
+    color: white;
+    font-weight: 500;
+}
+
+.register-link {
+    font-size: .9em;
+    color: white;
+    text-align: center;
+    margin: 20px 0; /* Adjust margin for register link */
+}
+
+.register-link p a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link p a:hover {
+    text-decoration: underline;
+}

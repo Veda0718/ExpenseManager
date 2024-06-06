@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal Expense Manager</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+	<section class="home">
+		<div class="content">
+			<h2>Personal Expense Management System</h2>
+		</div>
+		<div class="login-register">
+			<div class="wrapper-login">
+				<h2>User Login</h2>
+				<div class="form__message form__message--error"></div>
+				<form id="loginForm" action="#" >
+					<div class="input-box">
+						<span class="icon"><ion-icon name="person"></ion-icon></span> <input
+							id="loginUsername" type="text" required> <label>Enter
+							your Username</label>
+						<div class="form__input-error-message"></div>
+					</div>
+					<div class="input-box">
+						<span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+						<input id="loginPassword" type="text" required> <label>Enter
+							your Password</label>
+						<div class="form__input-error-message"></div>
+					</div>
+					<button type="submit" class="btn" onclick="loginUser()">Login</button>
+					<div class="register-link">
+						<p>
+							Don't have an account? <a href="#" class="register-form">Register
+								here!</a>
+						</p>
+					</div>
+				</form>
+			</div>
+			<div class="wrapper-register form--hidden">
+				<h2>Sign Up</h2>
+				<div class="form__message form__message--error"></div>
+				<form id="signupForm" action="#">
+					<div class="input-box">
+						<span class="icon"><ion-icon name="person"></ion-icon></span> <input
+							type="text" id="username" name="username" required> <label>Enter
+							your Username</label>
+						<div class="form__input-error-message"></div>
+					</div>
+					<div class="input-box">
+						<span class="icon"><ion-icon name="mail"></ion-icon></span> <input
+							type="email" id="email" name="email" required> <label>Enter
+							your Email</label>
+						<div class="form__input-error-message"></div>
+					</div>
+					<div class="input-box">
+						<span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+						<input type="text" id="password" name="password" required>
+						<label>Enter your Password</label>
+						<div class="form__input-error-message"></div>
+					</div>
+					<button type="submit" class="btn" onclick="saveUser()">Sign
+						Up</button>
+					<div class="register-link">
+						<p>
+							Already have an account? <a href="#" class="login-form">Login
+								here!</a>
+						</p>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+	<script>
+        function setFormMessage(formElement, type, message) {
+            const messageElement = formElement.querySelector(".form__message");
+
+            messageElement.textContent = message;
+            messageElement.classList.remove("form__message--success", "form__message--error");
+            messageElement.classList.add(`form__message--${type}`);
+        }
+
+        function setInputError(inputElement, message) {
+            inputElement.classList.add("input-box--error");
+            inputElement.parentElement.querySelector(".form__input-error-message").textContent = message;
+        }
+
+        function clearInputError(inputElement) {
+            inputElement.classList.remove("input-box--error");
+            inputElement.parentElement.querySelector(".form__input-error-message").textContent = "";
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const loginForm = document.querySelector(".wrapper-login");
+            const createAccountForm = document.querySelector(".wrapper-register");
+
+            document.querySelector(".register-form").addEventListener("click", e => {
+                e.preventDefault();
+                loginForm.classList.add("form--hidden");
+                createAccountForm.classList.remove("form--hidden");
+            });
+
+            document.querySelector(".login-form").addEventListener("click", e => {
+                e.preventDefault();
+                loginForm.classList.remove("form--hidden");
+                createAccountForm.classList.add("form--hidden");
+            });
+
+            document.querySelectorAll(".input-box").forEach(inputElement => {
+                inputElement.addEventListener("input", e => {
+                    clearInputError(inputElement);
+                });
+            });
+            
+            const loggedInUsername = sessionStorage.getItem("loggedInUsername");
+            if (loggedInUsername) {
+                sessionStorage.removeItem("loggedInUsername");
+            }
+        });
+
+        function saveUser() {
+            var form = document.getElementById("signupForm");
+            var formData = new FormData(form);
+            var user = {
+                email: formData.get("email"),
+                username: formData.get("username"),
+                password: formData.get("password")
+            };
+
+            fetch("http://localhost:8081/users", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(user)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert("User saved successfully");
+                } else {
+                    response.text().then(errorMessage => {
+                        alert(errorMessage);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+        function loginUser() {
+            var username = document.getElementById("loginUsername").value;
+            var password = document.getElementById("loginPassword").value;
+
+            fetch("http://localhost:8081/users/" + username)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        alert("User does not exist. Please register first.");
+                        throw new Error("User not found");
+                    }
+                })
+                .then(user => {
+                    if (user.password === password) {
+                        sessionStorage.setItem("loggedInUsername", username);
+                        window.location.href = "home.html";
+                    } else {
+                        alert("Incorrect password. Please try again.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        }
+
+    </script>
+	<script type="module"
+		src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+	<script nomodule
+		src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>
